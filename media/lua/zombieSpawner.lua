@@ -33,7 +33,7 @@ function onGameTick()
 end
 
 -- 注册游戏刻事件，定期调用 onGameTick 函数
-Events.OnTick.Add(onGameTick)
+-- Events.OnTick.Add(onGameTick)
 
 
 
@@ -41,41 +41,19 @@ Events.OnTick.Add(onGameTick)
 local https = require("ssl.https")  -- 使用 ssl.https 来发送 GET 请求
 local json = require("dkjson")     -- 使用 dkjson 来解析 JSON 数据
 
--- 替换为你的 Bot Token 和频道 ID
-local bot_token = "YOUR_BOT_TOKEN"
-local channel_id = "YOUR_CHANNEL_ID"
+-- 发送一个 HTTP GET 请求的示例
+local response, status = https.request("https://example.com")
 
--- 构造 Discord API 请求 URL
-local url = "https://discord.com/api/v10/channels/" .. channel_id .. "/messages"
-
--- 设置请求头
-local headers = {
-    ["Authorization"] = "Bot " .. bot_token,
-    ["User-Agent"] = "LuaScript (https://yourbotwebsite.com, v1.0)",
-}
-
--- 发送 GET 请求并获取响应
-local response_body, status_code, response_headers = https.request{
-    url = url,
-    headers = headers,
-}
 
 -- 检查请求是否成功
-if status_code == 200 then
-    -- 解析 JSON 响应
-    local messages, pos, err = json.decode(response_body, 1, nil)
-
-    if err then
-        print("Error decoding JSON: " .. err)
-    else
-        -- 输出消息内容
-        for _, message in ipairs(messages) do
-            print(message.author.username .. ": " .. message.content)
-        end
-    end
+if status == 200 then
+    print("请求成功!")
+    print("响应内容：\n" .. response)
 else
-    print("Failed to fetch messages. Status code: " .. status_code)
+    print("请求失败，状态码：" .. status)
 end
+
+
 
 
 
